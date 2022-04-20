@@ -7,7 +7,7 @@ const CardMovieSmall = ({onPress, name, img, category, rate}) => {
     <Pressable onPress={onPress}>
       <View style={styles.container}>
         <Image style={styles.imageThumbnail} source={img} />
-        <View>
+        <View style={{flex: 1}}>
           <Text style={styles.movieName}>{name}</Text>
           <View
             style={{
