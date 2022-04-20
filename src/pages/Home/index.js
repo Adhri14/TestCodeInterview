@@ -1,0 +1,144 @@
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  StatusBar,
+  Image,
+  ScrollView,
+} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {DummyImage, Notif, Star} from '../../assets/icons';
+import CardMovieBig from '../../components/CardMovieBig';
+import CardMovieSmall from '../../components/CardMovieSmall';
+import Gap from '../../components/Gap';
+import axios from 'axios';
+import {useDispatch, useSelector} from 'react-redux';
+import {getMovies} from '../../redux/thunk';
+
+const Home = ({navigation}) => {
+  const dispatch = useDispatch();
+  const {setMovie} = useSelector(state => state);
+
+  useEffect(() => {
+    dispatch(getMovies());
+  }, []);
+
+  return (
+    <SafeAreaView style={styles.page}>
+      <StatusBar backgroundColor="#1D2027" barStyle="light-content" />
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1}}
+        showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          <View style={styles.rowHeader}>
+            <Text style={styles.titleHeader}>Halo, Everyone</Text>
+            <Image source={Notif} />
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.title}>Top Movie</Text>
+            <Text style={styles.subtitle}>See more</Text>
+          </View>
+        </View>
+        <ScrollView
+          style={{flexGrow: 0}}
+          horizontal
+          showsHorizontalScrollIndicator={false}>
+          <View style={styles.carousel}>
+            {setMovie.movies?.map((item, index) => {
+              const n = index + 1;
+              if (n <= 3) {
+                return (
+                  <CardMovieBig
+                    key={item.id.toString()}
+                    name={item.title || item.name}
+                    rate={item.vote_average}
+                    img={{
+                      uri: `https://image.tmdb.org/t/p/w500${item.poster_path}`,
+                    }}
+                    onPress={() =>
+                      navigation.navigate('DetailMovie', {id: item.id})
+                    }
+                  />
+                );
+              }
+            })}
+          </View>
+        </ScrollView>
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <Text style={styles.title}>Movie</Text>
+            <Text style={styles.subtitle}>See more</Text>
+          </View>
+          <Gap height={18} />
+          {setMovie.movies?.map((item, index) => {
+            const n = index + 1;
+            if (n <= 5) {
+              return (
+                <View key={item.id.toString()}>
+                  <CardMovieSmall
+                    name={item.title || item.name}
+                    rate={item.vote_average}
+                    img={{
+                      uri: `https://image.tmdb.org/t/p/w500${item.poster_path}`,
+                    }}
+                    onPress={() =>
+                      navigation.navigate('DetailMovie', {id: item.id})
+                    }
+                  />
+                  <Gap height={18} />
+                </View>
+              );
+            }
+          })}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default Home;
+
+const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+    backgroundColor: '#1D2027',
+  },
+  container: {
+    marginHorizontal: 30,
+  },
+  rowHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 30,
+  },
+  titleHeader: {
+    fontSize: 16,
+    color: 'white',
+    fontFamily: 'Poppins-Medium',
+  },
+  carousel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+    marginLeft: 30,
+    marginBottom: 10,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 42,
+  },
+  title: {
+    fontSize: 20,
+    color: 'white',
+    fontFamily: 'Poppins-Medium',
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#696D74',
+    fontFamily: 'Poppins-Light',
+  },
+});
