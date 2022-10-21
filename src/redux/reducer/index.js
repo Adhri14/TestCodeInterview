@@ -5,7 +5,11 @@ const initState = {
   movie: {},
 };
 
-export const setMovie = (state = initState, action) => {
+const initStateLng = {
+  lang: 'id',
+};
+
+const setMovie = (state = initState, action) => {
   if (action.type === 'SET_MOVIES') {
     return {
       ...state,
@@ -21,5 +25,15 @@ export const setMovie = (state = initState, action) => {
   return state;
 };
 
-const reducer = combineReducers({setMovie});
+const setLang = (state = initStateLng, action) => {
+  if (action.type === 'SET_LANG') {
+    return {
+      ...state,
+      lang: action.value,
+    };
+  }
+  return state;
+};
+
+const reducer = combineReducers({setMovie, setLang});
 export default reducer;

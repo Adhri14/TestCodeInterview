@@ -15,6 +15,7 @@ import Button from '../../components/Button';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {getDetailMovie} from '../../redux/thunk';
+import I18n from '../../utils/I18n';
 
 const DetailMovie = ({navigation, route}) => {
   const {id} = route.params;
@@ -39,7 +40,7 @@ const DetailMovie = ({navigation, route}) => {
               onPress={() => navigation.goBack()}>
               <Image source={Btn_Back} />
             </Pressable>
-            <Text style={styles.titleHeader}>Detail Movie</Text>
+            <Text style={styles.titleHeader}>{I18n.t('titleHeader')}</Text>
             <Pressable style={styles.button}>
               <Image source={Btn_Save} />
             </Pressable>
@@ -55,7 +56,7 @@ const DetailMovie = ({navigation, route}) => {
           <Text style={styles.name}>{setMovie.movie.original_title}</Text>
           <View style={styles.row}>
             <Text style={styles.director}>
-              Director :{' '}
+              {I18n.t('director')} :{' '}
               {setMovie.movie?.production_companies?.map((item, index) => {
                 if (index + 1 <= 1) return item.name;
               })}{' '}
@@ -75,7 +76,7 @@ const DetailMovie = ({navigation, route}) => {
             ))}
           </View>
           <Gap height={30} />
-          <Text style={styles.name}>Storyline</Text>
+          <Text style={styles.name}>{I18n.t('description')}</Text>
           <Text
             style={styles.desc}
             numberOfLines={numberOfLines}
@@ -91,7 +92,9 @@ const DetailMovie = ({navigation, route}) => {
               }
             }}
             style={styles.link}>
-            {numberOfLines === 2 ? 'Read More' : 'Show less'}
+            {numberOfLines === 2
+              ? I18n.t('textActionReadMore')
+              : I18n.t('textActionShowLess')}
           </Text>
           {/* <Gap height={42} />
           <Button title="Watch Movie" /> */}
